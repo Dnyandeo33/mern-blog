@@ -19,9 +19,21 @@ app.use('/api/auth', authRoutes);
 
 
 // 404
-app.use('*', (req, res) => {
-    res.status(404).json({ message: 'page not found' })
-})
+// app.use('*', (req, res) => {
+//     res.status(404).json({ message: 'page not found' })
+// })
+
+app.use((err, req, res, next) => {
+    const statusCode = err.statusCode || 500;
+    const message = err.message || "Internal Server Error";
+
+    res.status(statusCode).json({
+        success: false,
+        statusCode,
+        message
+    });
+});
+
 
 // server
 const server = app.listen(PORT, () => {
