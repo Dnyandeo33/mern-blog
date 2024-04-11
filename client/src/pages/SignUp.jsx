@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 const SingUp = () => {
   const navigateTo = useNavigate();
+
   const [formData, setFormData] = useState({});
   const [errormessage, setErrorMessage] = useState(null);
   const [loading, setLoading] = useState(false);
