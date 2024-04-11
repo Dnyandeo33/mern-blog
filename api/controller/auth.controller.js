@@ -1,4 +1,5 @@
 import bcryptjs from 'bcryptjs';
+import jsw from 'jsonwebtoken';
 import validator from "validator";
 import User from "../models/user.model.js";
 import { errorHandler } from '../utils/error.js';
@@ -32,7 +33,25 @@ const authController = {
         }
     },
 
-    signIn: async (req, res) => {
+    signIn: async (req, res, next) => {
+        const { email, password } = req.body;
+        if (!email || !password) return next(errorHandler(400, 'All fields required...'));
+
+        try {
+            const isValidUser = await User.findOne({ email });
+            if (!isValidUser) return next(errorHandler(400, 'User not found'));
+
+            const { password: pass, ...rest } = isValidUser._doc;
+
+            const isValidPassword = bcryptjs.compareSync(password, isValidUser.password);
+            if (!isValidPassword) return next(errorHandler(400, 'Invalid password'));
+
+            const token = jsw.sign({ id: isValidUser._id }, process.env.JWT_SECRET);
+            res.status(200).cookie('access_token', token, { httpOnly: true }).json({ success: true, rest });
+
+        } catch (error) {
+            next(error);
+        }
     },
     signOut: async (req, res) => {
     }
