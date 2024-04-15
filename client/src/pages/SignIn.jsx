@@ -9,12 +9,10 @@ import {
 } from '../redux/user/userSlice.js';
 
 import { useDispatch, useSelector } from 'react-redux';
+import OAuth from '../components/OAuth.jsx';
 
 const SingIn = () => {
   const [formData, setFormData] = useState({});
-  //const [errormessage, setErrorMessage] = useState(null);
-  //const [loading, setLoading] = useState(false);
-
   const { loading, error: errormessage } = useSelector((state) => state.user);
   const navigateTo = useNavigate();
   const dispatch = useDispatch();
@@ -97,6 +95,7 @@ const SingIn = () => {
                 'sing in'
               )}
             </Button>
+            <OAuth />
           </form>
           <div className="flex gap-2 text-sm mt-5">
             <span>Dont Have an account?</span>
