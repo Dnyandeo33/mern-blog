@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import FooterCom from './components/FooterCom';
 import Header from './components/Header';
+import PrivateRoute from './components/PrivateRoute';
 import About from './pages/About';
 import Dashboard from './pages/Dashboard';
 import Home from './pages/Home';
@@ -18,7 +19,9 @@ const App = () => {
         <Route path="/projects" element={<Projects />} />
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/sign-up" element={<SignUp />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route element={<PrivateRoute />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+        </Route>
       </Routes>
       <FooterCom />
     </BrowserRouter>
