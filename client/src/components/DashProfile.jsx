@@ -1,3 +1,4 @@
+import axios from 'axios';
 import {
   getDownloadURL,
   getStorage,
@@ -8,8 +9,13 @@ import { Alert, Button, TextInput } from 'flowbite-react';
 import { useEffect, useRef, useState } from 'react';
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { app } from '../firebase.js';
+import {
+  updateFailure,
+  updateStart,
+  updateSuccess,
+} from '../redux/user/userSlice.js';
 
 const DashProfile = () => {
   // get currentUser
@@ -19,6 +25,13 @@ const DashProfile = () => {
   const [imageFileUrl, setImageFileUrl] = useState(null);
   const [imageFileUploadProgress, setImageFileUploadProgress] = useState(null);
   const [imageFileUploadError, setImageFileUploadError] = useState(null);
+  const [formData, setFormData] = useState({});
+  const [imageFileUploading, setImageFileUploading] = useState(false);
+  const [updateUserSuccess, setUpdateUserSuccess] = useState(null);
+  const [updateUserError, setUpdateUserError] = useState(null);
+
+  // redux method
+  const dispatch = useDispatch();
 
   // used Hook for file reference
   const fileRef = useRef();
@@ -37,6 +50,7 @@ const DashProfile = () => {
 
   // create function for upload image
   const uploadImage = async () => {
+    setImageFileUploading(true);
     setImageFileUploadError(null);
 
     // get storage from firebase/storage
@@ -57,26 +71,65 @@ const DashProfile = () => {
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         setImageFileUploadProgress(progress.toFixed(0));
       },
-      (error) => {
+      () => {
         // set the error if its happen
         setImageFileUploadError('Upload Fail, (File must be less then 2MB)');
         setImageFileUploadProgress(null);
         setImageFile(null);
         setImageFileUrl(null);
+        setImageFileUploading(false);
       },
       () => {
         // get url from firebase/storage using getDownloadURL function
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           setImageFileUrl(downloadURL);
+          setFormData({ ...formData, profilePic: downloadURL });
+          setImageFileUploading(false);
         });
       }
     );
   };
 
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setUpdateUserError(null);
+    setUpdateUserSuccess(null);
+    if (Object.keys(formData).length === 0) {
+      setUpdateUserError('No changes made');
+      return;
+    }
+    if (imageFileUploading) {
+      setUpdateUserError('Please wait, image is uploading...');
+      return;
+    }
+
+    try {
+      dispatch(updateStart());
+      const res = await axios.put(
+        `/api/users/${currentUser.rest._id}`,
+        formData
+      );
+      const data = await res.data;
+      if (!res.statusText === 'OK') {
+        setUpdateUserError(data.message);
+        dispatch(dispatch(updateFailure(data.message)));
+      }
+      dispatch(updateSuccess(data));
+      setUpdateUserSuccess('Profile updated successfully...');
+    } catch (error) {
+      dispatch(updateFailure(error.response.data.message));
+      setUpdateUserError(error.response.data.message);
+    }
+  };
+
   return (
     <div className="max-w-lg mx-auto p-3 w-full">
       <h1 className="text-center font-semibold text-3xl my-7">Profile</h1>
-      <form className="flex flex-col gap-6">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-6">
         {/* input for upload image its refer to below div  */}
         <input
           type="file"
@@ -125,14 +178,21 @@ const DashProfile = () => {
           placeholder="username"
           id="username"
           defaultValue={currentUser.rest.username}
+          onChange={handleChange}
         />
         <TextInput
           type="email"
           placeholder="email"
           id="email"
           defaultValue={currentUser.rest.email}
+          onChange={handleChange}
         />
-        <TextInput type="password" placeholder="**********" id="password" />
+        <TextInput
+          type="password"
+          placeholder="**********"
+          id="password"
+          onChange={handleChange}
+        />
         <Button type="submit" gradientDuoTone="purpleToBlue" outline>
           Update
         </Button>
@@ -141,6 +201,16 @@ const DashProfile = () => {
         <span className="text-red-500 cursor-pointer">Delete Profile</span>
         <span className="text-red-500 cursor-pointer">Sign out</span>
       </div>
+      {updateUserSuccess && (
+        <Alert color="success" className="mt-5">
+          {updateUserSuccess}
+        </Alert>
+      )}
+      {updateUserError && (
+        <Alert color="failure" className="mt-5">
+          {updateUserError}
+        </Alert>
+      )}
     </div>
   );
 };

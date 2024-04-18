@@ -35,23 +35,22 @@ const userController = {
             if (username.includes(' ')) return next(errorHandler(400, 'username cannot contain spaces'));
             if (username !== req.body.username.toLowerCase()) return next(errorHandler(400, 'username must be lowercase'));
             if (!username.match(/^[a-zA-Z0-9]+$/)) return next(errorHandler(400, 'username only contains letters and numbers'));
-
-            // update user
-            try {
-                const updatedUser = await User.findByIdAndUpdate(userId, {
-                    // use $set for if user want to update only one info
-                    $set: {
-                        username,
-                        password: req.body.password,
-                        email,
-                        profilePic
-                    }
-                }, { new: true });
-                const { password, ...rest } = updatedUser._doc;
-                res.status(200).json({ success: true, rest })
-            } catch (error) {
-                next(errorHandler(error))
-            }
+        }
+        // update user
+        try {
+            const updatedUser = await User.findByIdAndUpdate(userId, {
+                // use set for if user want to update only one info
+                $set: {
+                    username,
+                    password: req.body.password,
+                    email,
+                    profilePic
+                }
+            }, { new: true });
+            const { password, ...rest } = updatedUser._doc;
+            res.status(200).json({ success: true, rest })
+        } catch (error) {
+            next(errorHandler(error))
         }
     }
 }
