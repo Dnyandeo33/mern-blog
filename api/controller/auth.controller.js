@@ -1,6 +1,5 @@
 import bcryptjs from 'bcryptjs';
-import e from 'express';
-import jsw from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import validator from "validator";
 import User from "../models/user.model.js";
 import { errorHandler } from '../utils/error.js';
@@ -69,7 +68,7 @@ const authController = {
             if (!isValidPassword) return next(errorHandler(400, 'Invalid password'));
 
             // create token using npm jesonwebtoken  
-            const token = jsw.sign({ id: isValidUser._id }, process.env.JWT_SECRET);
+            const token = jwt.sign({ id: isValidUser._id }, process.env.JWT_SECRET);
             res.status(200).cookie('access_token', token, { httpOnly: true }).json({ success: true, rest });
 
         } catch (error) {
