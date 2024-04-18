@@ -52,6 +52,22 @@ const userController = {
         } catch (error) {
             next(errorHandler(error))
         }
+    },
+
+    deleteUser: async (req, res, next) => {
+        // get userId from params
+        const { userId } = req.params;
+        // get user from verify token middleware
+        const { id } = req.user;
+        if (id !== userId) return next(errorHandler(403, `You are not authorized to delete this user`));
+        try {
+            const deleteUser = await User.findByIdAndDelete(userId)
+            res.status(200).json({
+                success: true, message: 'User has been deleted..'
+            });
+        } catch (error) {
+            next(errorHandler(error))
+        }
     }
 }
 export default userController;
