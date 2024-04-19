@@ -85,7 +85,7 @@ const authController = {
 
             // if email exit set the token 
             if (existEmail) {
-                const token = jsw.sign({ id: existEmail._id }, process.env.JWT_SECRET);
+                const token = jwt.sign({ id: existEmail._id }, process.env.JWT_SECRET);
                 const { password: pass, ...rest } = existEmail._doc;
                 res.status(200).cookie('access_token', token, { httpOnly: true }).json({ success: true, rest });
             }
@@ -103,7 +103,7 @@ const authController = {
             });
 
             // after creating new user set the token
-            const token = jsw.sign({ id: newUser._id }, process.env.JWT_SECRET);
+            const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
             const { password: pass, ...rest } = newUser._doc;
             res.status(200).cookie('access_token', token, { httpOnly: true }).json({ success: true, rest });
         } catch (error) {
