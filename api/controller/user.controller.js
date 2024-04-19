@@ -68,6 +68,13 @@ const userController = {
         } catch (error) {
             next(errorHandler(error))
         }
+    },
+    signOut: async (req, res, next) => {
+        try {
+            await res.clearCookie('access_token').status(200).json({ success: true, message: 'User has been sign out' })
+        } catch (error) {
+            next(errorHandler(error))
+        }
     }
 }
 export default userController;

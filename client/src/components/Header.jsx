@@ -1,15 +1,31 @@
+import axios from 'axios';
 import { Avatar, Button, Dropdown, Navbar, TextInput } from 'flowbite-react';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { FaMoon, FaSun } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 import { toggleTheme } from '../redux/theme/themeSlice';
+import { signOutSuccess } from '../redux/user/userSlice.js';
 
 const Header = () => {
   const path = useLocation().pathname;
   const { currentUser } = useSelector((state) => state.user);
   const { theme } = useSelector((state) => state.theme);
   const dispatch = useDispatch();
+
+  const handleSignOut = async () => {
+    try {
+      const res = await axios.post('api/users/sign-out');
+      const data = res.data;
+      if (!res.ok) {
+        console.log(data.message);
+      }
+      dispatch(signOutSuccess());
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   return (
     // logo
     <Navbar className=" border-b-2">
@@ -63,7 +79,7 @@ const Header = () => {
               <Dropdown.Item>Profile</Dropdown.Item>
             </Link>
             <Dropdown.Divider />
-            <Dropdown.Item>Sign out</Dropdown.Item>
+            <Dropdown.Item onClick={handleSignOut}>Sign out</Dropdown.Item>
           </Dropdown>
         ) : (
           <Link to="/sign-in">
