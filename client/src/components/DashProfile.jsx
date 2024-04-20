@@ -24,7 +24,7 @@ import {
 
 const DashProfile = () => {
   // get currentUser
-  const { currentUser, error } = useSelector((state) => state.user);
+  const { currentUser } = useSelector((state) => state.user);
   // state of image
   const [imageFile, setImageFile] = useState(null);
   const [imageFileUrl, setImageFileUrl] = useState(null);
@@ -252,11 +252,11 @@ const DashProfile = () => {
           {updateUserError}
         </Alert>
       )}
-      {error && (
+      {/* {error && (
         <Alert color="failure" className="mt-5">
           {error}
         </Alert>
-      )}
+      )} */}
       <Modal
         show={showModel}
         onClose={() => setShowModel(false)}

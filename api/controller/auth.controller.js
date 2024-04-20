@@ -23,6 +23,7 @@ const authController = {
 
             // validate email using validator npm package
             if (!validator.isEmail(email)) next(errorHandler(400, 'Email must be valid'));
+            if (username !== username.toLowerCase()) return next(errorHandler(400, 'username must be lowercase'));
 
             // validate strong password 
             if (!validator.isStrongPassword(password)) {
