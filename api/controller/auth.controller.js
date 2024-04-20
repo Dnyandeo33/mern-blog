@@ -69,7 +69,7 @@ const authController = {
             if (!isValidPassword) return next(errorHandler(400, 'Invalid password'));
 
             // create token using npm jesonwebtoken  
-            const token = jwt.sign({ id: isValidUser._id }, process.env.JWT_SECRET);
+            const token = jwt.sign({ id: isValidUser._id, isAdmin: isValidUser.isAdmin }, process.env.JWT_SECRET);
             res.status(200).cookie('access_token', token, { httpOnly: true }).json({ success: true, rest });
 
         } catch (error) {
@@ -86,7 +86,7 @@ const authController = {
 
             // if email exit set the token 
             if (existEmail) {
-                const token = jwt.sign({ id: existEmail._id }, process.env.JWT_SECRET);
+                const token = jwt.sign({ id: existEmail._id, isAdmin: existEmail.isAdmin }, process.env.JWT_SECRET);
                 const { password: pass, ...rest } = existEmail._doc;
                 res.status(200).cookie('access_token', token, { httpOnly: true }).json({ success: true, rest });
             }
@@ -104,7 +104,7 @@ const authController = {
             });
 
             // after creating new user set the token
-            const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
+            const token = jwt.sign({ id: newUser._id, isAdmin: newUser.isAdmin }, process.env.JWT_SECRET);
             const { password: pass, ...rest } = newUser._doc;
             res.status(200).cookie('access_token', token, { httpOnly: true }).json({ success: true, rest });
         } catch (error) {
