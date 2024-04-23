@@ -6,7 +6,7 @@ import { errorHandler } from "../utils/error.js";
 const userController = {
     getUser: async (req, res) => {
         const users = await User.find({});
-        res.status(200).json({ users })
+        res.status(200).json({ success: true, users: users })
     },
 
     // update user 
