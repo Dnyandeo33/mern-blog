@@ -1,18 +1,33 @@
 import axios from 'axios';
+// firebase imports
 import {
   getDownloadURL,
   getStorage,
   ref,
   uploadBytesResumable,
 } from 'firebase/storage';
+
+// flowbite imports
 import { Alert, Button, Modal, TextInput } from 'flowbite-react';
+
+//react imports
 import { useEffect, useRef, useState } from 'react';
+
+// react circular imports
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
+
+// react icon imports
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
+
+// react redux import
 import { useDispatch, useSelector } from 'react-redux';
+
+// react router dom imports
 import { Link } from 'react-router-dom';
 import { app } from '../firebase.js';
+
+// redux userSlice imports
 import {
   deleteFailure,
   deleteStart,
@@ -32,9 +47,12 @@ const DashProfile = () => {
   const [imageFileUploadProgress, setImageFileUploadProgress] = useState(null);
   const [imageFileUploadError, setImageFileUploadError] = useState(null);
   const [imageFileUploading, setImageFileUploading] = useState(false);
+  // update user state
   const [updateUserSuccess, setUpdateUserSuccess] = useState(null);
   const [updateUserError, setUpdateUserError] = useState(null);
+  // showModel state
   const [showModel, setShowModel] = useState(false);
+  // form data state
   const [formData, setFormData] = useState({});
 
   // redux method
@@ -97,10 +115,12 @@ const DashProfile = () => {
     );
   };
 
+  // handle form data
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
   };
 
+  // handle submit user
   const handleSubmit = async (e) => {
     e.preventDefault();
     setUpdateUserError(null);
@@ -133,6 +153,7 @@ const DashProfile = () => {
     }
   };
 
+  // handle delete user
   const handleDelete = async () => {
     setShowModel(false);
     try {
@@ -148,6 +169,7 @@ const DashProfile = () => {
     }
   };
 
+  // handle sign out user
   const handleSignOut = async () => {
     try {
       const res = await axios.post('api/users/sign-out');
