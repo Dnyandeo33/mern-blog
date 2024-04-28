@@ -12,7 +12,7 @@ const postController = {
         if (!req.body.title || !req.body.content) return next(errorHandler(400, 'Provide all the fields..'));
 
         try {
-            const slug = req.body.title.toLowerCase().split(' ').join('-').replace(/[^a-zA-Z0-9]/g, '');
+            const slug = req.body.title.toLowerCase().split(' ').join('-').replace(/[^a-zA-Z0-9]/g, '-');
 
             const newPost = new Post({
                 userId: req.user.id,

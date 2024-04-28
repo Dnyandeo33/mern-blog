@@ -1,5 +1,7 @@
+import axios from 'axios';
 import { Alert, Button, FileInput, Select, TextInput } from 'flowbite-react';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import {
   getDownloadURL,
@@ -20,6 +22,8 @@ const CreatePost = () => {
   const [imageUploadProgress, setImageUploadProgress] = useState(null);
   const [imageUploadError, setImageUploadError] = useState(null);
   const [formData, setFormData] = useState({});
+  const [publishError, setPublishError] = useState(null);
+  const navigateTo = useNavigate();
 
   const handleUploadImage = () => {
     try {
@@ -58,12 +62,36 @@ const CreatePost = () => {
       setImageUploadProgress(null);
     }
   };
+
+  const handleInput = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const res = await axios.post('/api/posts/create', formData);
+      const data = await res.data;
+      console.log(data);
+      if (!res.statusText === 'OK') {
+        setPublishError(data.message);
+        return;
+      }
+      setPublishError(null);
+      navigateTo(`/post/${data.post.slug}`);
+    } catch (error) {
+      console.log(error);
+      setPublishError(error.response.data.message);
+    }
+  };
+
   return (
     <div className="p-3 max-w-3xl mx-auto min-h-screen">
       <h1 className=" text-center text-3xl my-7 font-semibold">
         Create A Post
       </h1>
-      <form className=" flex flex-col gap-4">
+      <form className=" flex flex-col gap-4" onSubmit={handleSubmit}>
         <div className=" flex flex-col gap-4 sm:flex-row justify-between">
           <TextInput
             type="text"
@@ -71,8 +99,9 @@ const CreatePost = () => {
             required
             id="title"
             className="flex-1"
+            onChange={handleInput}
           />
-          <Select>
+          <Select id="category" onChange={handleInput}>
             <option value="uncategorized">Select a category</option>
             <option value="javascript">Javascript</option>
             <option value="react">React</option>
@@ -118,10 +147,18 @@ const CreatePost = () => {
           placeholder="Write something..."
           className="h-72 mb-12"
           required
+          onChange={(value) => {
+            setFormData({ ...formData, content: value });
+          }}
         />
         <Button type="submit" gradientDuoTone="purpleToPink">
           Publish
         </Button>
+        {publishError && (
+          <Alert className="mt-5" color="failure">
+            {publishError}
+          </Alert>
+        )}
       </form>
     </div>
   );
