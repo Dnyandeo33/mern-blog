@@ -41,7 +41,6 @@ import {
 const DashProfile = () => {
   // get currentUser
   const { currentUser, loading } = useSelector((state) => state.user);
-  console.log(currentUser);
   // state of image
   const [imageFile, setImageFile] = useState(null);
   const [imageFileUrl, setImageFileUrl] = useState(null);

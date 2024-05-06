@@ -73,7 +73,6 @@ const CreatePost = () => {
     try {
       const res = await axios.post('/api/posts/create', formData);
       const data = await res.data;
-      console.log(data);
       if (!res.statusText === 'OK') {
         setPublishError(data.message);
         return;
