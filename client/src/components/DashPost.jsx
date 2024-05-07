@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Table, TableBody, TableCell, TableHead } from 'flowbite-react';
+import { Table } from 'flowbite-react';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -8,6 +8,7 @@ const DashPost = () => {
   const currentUser = useSelector((state) => state.user);
   const { _id, isAdmin } = currentUser.currentUser.rest;
   const [userPosts, setUserPosts] = useState([]);
+  const [showMore, setShowMore] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -15,10 +16,27 @@ const DashPost = () => {
       const data = await res.data;
       if (res.statusText === 'OK') {
         setUserPosts(data.data);
+        if (data.data.length < 9) {
+          setShowMore(false);
+        }
       }
     };
     fetchData();
   }, [_id]);
+
+  const handleShowMore = async () => {
+    const startIndex = userPosts.length;
+    const res = await axios.get(
+      `/api/posts/get-posts?userId=${_id}&startIndex=${startIndex}`
+    );
+
+    if (res.statusText === 'OK') {
+      setUserPosts((prev) => [...prev, ...res.data.data]);
+      if (res.data.data.length < 9) {
+        setShowMore(false);
+      }
+    }
+  };
 
   return (
     <div className=" table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-300 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500 ">
@@ -76,6 +94,14 @@ const DashPost = () => {
               </Table.Body>
             ))}
           </Table>
+          {showMore && (
+            <button
+              onClick={handleShowMore}
+              className="w-full text-teal-500 self-center text-sm py-7"
+            >
+              Show More
+            </button>
+          )}
         </>
       ) : (
         <p>You Have No Post Yet!</p>
