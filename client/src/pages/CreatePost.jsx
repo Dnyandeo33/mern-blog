@@ -147,7 +147,10 @@ const CreatePost = () => {
           className="h-72 mb-12"
           required
           onChange={(value) => {
-            setFormData({ ...formData, content: value });
+            setFormData({
+              ...formData,
+              content: value.replace(/<[^>]+>/g, ''),
+            });
           }}
         />
         <Button type="submit" gradientDuoTone="purpleToPink">

@@ -5,9 +5,9 @@ const { createPost, getAllPosts, deletePost, updatePost } = postController;
 
 const router = express.Router();
 
-router.get('/', getAllPosts);
+router.get('/get-posts', getAllPosts);
 router.post('/create', verifyToken, createPost);
-router.put('/update', verifyToken, updatePost)
+router.put('/update-post', verifyToken, updatePost)
 router.delete('/:postId', verifyToken, deletePost)
 
 
