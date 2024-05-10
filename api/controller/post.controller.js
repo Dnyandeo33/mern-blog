@@ -73,11 +73,12 @@ const postController = {
     },
 
     deletePost: async (req, res, next) => {
-        const { postId } = req.params
-        const { isAdmin } = req.user
-        if (!isAdmin) return next(errorHandler(403, 'Not allow to delete post'));
+        const { postId, userId } = req.params
+        console.log(postId, userId);
+        const { isAdmin, id } = req.user
+        if (!isAdmin || id !== userId) return next(errorHandler(403, 'Not allow to delete post'));
         try {
-            const deletePost = await Post.findByIdAndDelete({ _id: postId });
+            const deletePost = await Post.findByIdAndDelete(postId);
             res.status(200).json({ success: true, message: "Post has been deleted successfully..." })
         } catch (error) {
             next(errorHandler(error))
