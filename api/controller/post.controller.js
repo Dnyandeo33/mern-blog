@@ -7,14 +7,14 @@ const postController = {
         try {
             const startIndex = parseInt(req.query.startIndex) || 0;
             const limit = parseInt(req.query.limit) || 9;
-            const sortDirection = req.query.order === 'dsc' ? 1 : -1;
+            const sortDirection = req.query.order === 'asc' ? 1 : -1;
 
             const posts = await Post.find({
                 // search using query
                 ...(req.query.userId && { userId: req.query.userId }),
                 ...(req.query.category && { category: req.query.category }),
                 ...(req.query.slug && { slug: req.query.slug }),
-                ...(req.query.postId && { postId: req.query.postId }),
+                ...(req.query.postId && { _id: req.query.postId }),
 
                 // search using regex
                 ...(req.query.searchTerm && {
@@ -86,8 +86,24 @@ const postController = {
     },
 
     updatePost: async (req, res, next) => {
-
-
+        const { postId, userId } = req.params
+        const { isAdmin, id } = req.user
+        if (!isAdmin || id !== userId) return next(errorHandler(403, 'You are not allow to update post'))
+        try {
+            const updatePost = await Post.findByIdAndUpdate({ _id: postId }, {
+                $set: {
+                    title: req.body.title,
+                    category: req.body.category,
+                    content: req.body.content,
+                    image: req.body.image
+                }
+            }, {
+                new: true
+            })
+            res.status(200).json({ success: true, post: updatePost })
+        } catch (error) {
+            next(error)
+        }
     }
 }
 

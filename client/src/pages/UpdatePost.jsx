@@ -1,7 +1,8 @@
 import axios from 'axios';
 import { Alert, Button, FileInput, Select, TextInput } from 'flowbite-react';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import {
   getDownloadURL,
@@ -17,13 +18,35 @@ import { app } from '../firebase';
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 
-const CreatePost = () => {
+const UpdatePost = () => {
   const [file, setFile] = useState(null);
   const [imageUploadProgress, setImageUploadProgress] = useState(null);
   const [imageUploadError, setImageUploadError] = useState(null);
   const [formData, setFormData] = useState({});
   const [publishError, setPublishError] = useState(null);
+
   const navigateTo = useNavigate();
+  const { postId } = useParams();
+  const currentUser = useSelector((state) => state.user);
+
+  useEffect(() => {
+    try {
+      const fetchData = async () => {
+        const res = await axios.get(`/api/posts/get-posts?postId=${postId}`);
+        const data = await res.data.data;
+        if (!res.statusText === 'OK') {
+          console.log(data.message);
+          return;
+        }
+        if (res.statusText === 'OK') {
+          setFormData(data[0]);
+        }
+      };
+      fetchData();
+    } catch (error) {
+      console.log(error);
+    }
+  }, [postId]);
 
   const handleUploadImage = () => {
     try {
@@ -71,7 +94,10 @@ const CreatePost = () => {
     e.preventDefault();
 
     try {
-      const res = await axios.post('/api/posts/create', formData);
+      const res = await axios.put(
+        `/api/posts/update-post/${formData._id}/${currentUser.currentUser.rest._id}`,
+        formData
+      );
       const data = await res.data;
       if (!res.statusText === 'OK') {
         setPublishError(data.message);
@@ -88,7 +114,7 @@ const CreatePost = () => {
   return (
     <div className="p-3 max-w-3xl mx-auto min-h-screen">
       <h1 className=" text-center text-3xl my-7 font-semibold">
-        Create A Post
+        Update A Post
       </h1>
       <form className=" flex flex-col gap-4" onSubmit={handleSubmit}>
         <div className=" flex flex-col gap-4 sm:flex-row justify-between">
@@ -99,8 +125,13 @@ const CreatePost = () => {
             id="title"
             className="flex-1"
             onChange={handleInput}
+            value={formData.title}
           />
-          <Select id="category" onChange={handleInput}>
+          <Select
+            id="category"
+            onChange={handleInput}
+            value={formData.category}
+          >
             <option value="uncategorized">Select a category</option>
             <option value="javascript">Javascript</option>
             <option value="react">React</option>
@@ -147,14 +178,12 @@ const CreatePost = () => {
           className="h-72 mb-12"
           required
           onChange={(value) => {
-            setFormData({
-              ...formData,
-              content: value,
-            });
+            setFormData({ ...formData, content: value });
           }}
+          value={formData.content}
         />
         <Button type="submit" gradientDuoTone="purpleToPink">
-          Publish
+          Update
         </Button>
         {publishError && (
           <Alert className="mt-5" color="failure">
@@ -166,4 +195,4 @@ const CreatePost = () => {
   );
 };
 
-export default CreatePost;
+export default UpdatePost;
