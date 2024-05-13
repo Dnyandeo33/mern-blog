@@ -106,7 +106,6 @@ const UpdatePost = () => {
       setPublishError(null);
       navigateTo(`/post/${data.post.slug}`);
     } catch (error) {
-      console.log(error);
       setPublishError(error.response.data.message);
     }
   };

@@ -74,7 +74,6 @@ const postController = {
 
     deletePost: async (req, res, next) => {
         const { postId, userId } = req.params
-        console.log(postId, userId);
         const { isAdmin, id } = req.user
         if (!isAdmin || id !== userId) return next(errorHandler(403, 'Not allow to delete post'));
         try {
