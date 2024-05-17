@@ -35,15 +35,12 @@ const userController = {
                 }
             })
 
-            res.status(200).json({ success: true, users: users, totalUser, lastMonthUser });
+            res.status(200).json({ success: true, users: userWithoutPassword, totalUser, lastMonthUser });
 
         } catch (error) {
             next(error)
 
         }
-
-        const users = await User.find({});
-        res.status(200).json({ success: true, users: users })
     },
 
     // update user 

@@ -1,10 +1,16 @@
 import axios from 'axios';
 import { Sidebar } from 'flowbite-react';
 import { useEffect, useState } from 'react';
-import { HiArrowSmRight, HiDocumentText, HiUser } from 'react-icons/hi';
+import {
+  HiArrowSmRight,
+  HiDocumentText,
+  HiOutlineUserGroup,
+  HiUser,
+} from 'react-icons/hi';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 import { signOutSuccess } from '../redux/user/userSlice.js';
+
 const DashSideBar = () => {
   const currentUser = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -46,13 +52,24 @@ const DashSideBar = () => {
             </Sidebar.Item>
           </Link>
           {currentUser.currentUser.rest.isAdmin && (
-            <Link to={'/dashboard?tab=post'}>
+            <Link to={'/dashboard?tab=posts'}>
               <Sidebar.Item
-                active={tab === 'post'}
+                active={tab === 'posts'}
                 icon={HiDocumentText}
                 as="div"
               >
-                Post
+                Posts
+              </Sidebar.Item>
+            </Link>
+          )}
+          {currentUser.currentUser.rest.isAdmin && (
+            <Link to={'/dashboard?tab=users'}>
+              <Sidebar.Item
+                active={tab === 'users'}
+                icon={HiOutlineUserGroup}
+                as="div"
+              >
+                Users
               </Sidebar.Item>
             </Link>
           )}
