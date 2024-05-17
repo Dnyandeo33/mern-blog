@@ -92,8 +92,8 @@ const userController = {
         // get userId from params
         const { userId } = req.params;
         // get user from verify token middleware
-        const { id } = req.user;
-        if (id !== userId) return next(errorHandler(403, `You are not authorized to delete this user`));
+        const { id, isAdmin } = req.user;
+        if (!isAdmin && id !== userId) return next(errorHandler(403, `You are not authorized to delete this user`));
         try {
             const deleteUser = await User.findByIdAndDelete(userId)
             res.status(200).json({
@@ -103,6 +103,7 @@ const userController = {
             next(errorHandler(error))
         }
     },
+
     signOut: async (req, res, next) => {
         try {
             await res.clearCookie('access_token').status(200).json({ success: true, message: 'User has been sign out' })

@@ -44,9 +44,7 @@ const DashUser = () => {
   const handleDeleteUser = async () => {
     setShowModel(false);
     try {
-      const res = await axios.delete(
-        `/api/posts/delete-post/${deleteUserId}/${_id}`
-      );
+      const res = await axios.delete(`/api/users/${deleteUserId}`);
       const data = await res.data;
       if (!res.statusText === 'OK') {
         console.log(data.message);
