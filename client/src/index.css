@@ -6,6 +6,60 @@ body {
   height: 100vh;
 }
 
+/* react quail */
 .ql-editor {
   font-size: 1.05rem;
+}
+
+/* post content custom css */
+.post-content p {
+  margin-bottom: 0.5rem;
+}
+
+.post-content h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  font-family: sans-serif;
+  margin: 1.5rem 0;
+}
+
+.post-content h2 {
+  font-size: 1.4rem;
+  font-family: sans-serif;
+  margin: 1.5rem 0;
+}
+
+.post-content a {
+  color: rgb(73, 149, 199);
+  text-decoration: none;
+}
+
+.post-content a:hover {
+  text-decoration: underline;
+}
+
+.dark .post-content a {
+  color: red;
+}
+
+code,
+kbd,
+samp,
+pre {
+  padding: 10px;
+  border-radius: 8px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    'Liberation Mono', 'Courier New', monospace;
+  font-feature-settings: normal;
+  font-variation-settings: normal;
+  background-color: rgb(24, 63, 105);
+
+  font-size: 1em;
+}
+
+.dark code,
+kbd,
+samp,
+pre {
+  color: aliceblue;
 }

@@ -3,6 +3,7 @@ import FooterCom from './components/FooterCom';
 import Header from './components/Header';
 import OnlyAdminPrivateRoute from './components/OnlyAdminPrivateRoute';
 import PrivateRoute from './components/PrivateRoute';
+import SinglePost from './components/SinglePost';
 import About from './pages/About';
 import CreatePost from './pages/CreatePost';
 import Dashboard from './pages/Dashboard';
@@ -29,6 +30,7 @@ const App = () => {
           <Route path="/create-post" element={<CreatePost />} />
           <Route path="/update-post/:postId" element={<UpdatePost />} />
         </Route>
+        <Route path="/post/:postSlug" element={<SinglePost />} />
       </Routes>
       <FooterCom />
     </BrowserRouter>

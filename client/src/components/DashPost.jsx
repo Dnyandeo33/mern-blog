@@ -18,8 +18,8 @@ const DashPosts = () => {
       const res = await axios.get(`/api/posts/get-posts?userId=${_id}`);
       const data = await res.data;
       if (res.statusText === 'OK') {
-        setUserPosts(data.data);
-        if (data.data.length < 9) {
+        setUserPosts(data.posts);
+        if (data.posts.length < 9) {
           setShowMore(false);
         }
       }
@@ -34,8 +34,8 @@ const DashPosts = () => {
     );
 
     if (res.statusText === 'OK') {
-      setUserPosts((prev) => [...prev, ...res.data.data]);
-      if (res.data.data.length < 9) {
+      setUserPosts((prev) => [...prev, ...res.data.posts]);
+      if (res.data.posts.length < 9) {
         setShowMore(false);
       }
     }

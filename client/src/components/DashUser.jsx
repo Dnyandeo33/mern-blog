@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 
 const DashUser = () => {
   const currentUser = useSelector((state) => state.user);
-  const { _id, isAdmin } = currentUser.currentUser.rest;
+  const { isAdmin } = currentUser.currentUser.rest;
   const [users, setUsers] = useState([]);
   const [showMore, setShowMore] = useState(true);
   const [showModel, setShowModel] = useState(false);

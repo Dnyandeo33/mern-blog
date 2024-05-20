@@ -42,7 +42,7 @@ const postController = {
 
             res.status(200).json({
                 success: true,
-                data: posts,
+                posts: posts,
                 total,
                 lastMontPost
             })

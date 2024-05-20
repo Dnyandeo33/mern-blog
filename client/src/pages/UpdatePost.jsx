@@ -33,7 +33,7 @@ const UpdatePost = () => {
     try {
       const fetchData = async () => {
         const res = await axios.get(`/api/posts/get-posts?postId=${postId}`);
-        const data = await res.data.data;
+        const data = await res.data.posts;
         if (!res.statusText === 'OK') {
           console.log(data.message);
           return;
