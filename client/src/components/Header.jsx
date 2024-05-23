@@ -15,7 +15,7 @@ const Header = () => {
 
   const handleSignOut = async () => {
     try {
-      const res = await axios.post('api/users/sign-out');
+      const res = await axios.post('/api/users/sign-out');
       const data = res.data;
       if (!res.ok) {
         console.log(data.message);
