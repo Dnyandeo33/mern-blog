@@ -87,9 +87,19 @@ const CommentSection = ({ postId }) => {
     }
   };
 
+  const handleEdit = (targetComment, newContent) => {
+    setComments(
+      comments.map((comment) =>
+        comment._id === targetComment._id
+          ? { ...comment, content: newContent }
+          : comment
+      )
+    );
+  };
+
   return (
     <div className=" max-w-2xl mx-auto w-full p-3">
-      {currentUser.currentUser ? (
+      {currentUser ? (
         <div className="flex items-center gap-1 my-5 text-gray-500 text-sm">
           <p>Singed in as:</p>
           <img
@@ -153,6 +163,7 @@ const CommentSection = ({ postId }) => {
               key={comment._id}
               comment={comment}
               onLike={handleLike}
+              onEdit={handleEdit}
             />
           ))}
         </>
