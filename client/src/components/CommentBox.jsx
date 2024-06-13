@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+
 import axios from 'axios';
 import { Button, Textarea } from 'flowbite-react';
 import moment from 'moment';
@@ -5,7 +7,7 @@ import { useEffect, useState } from 'react';
 import { FaThumbsUp } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
 
-const CommentBox = ({ comment, onLike, onEdit }) => {
+const CommentBox = ({ comment, onLike, onEdit, onDelete }) => {
   const { currentUser } = useSelector((state) => state.user);
   const [user, setUser] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -119,13 +121,22 @@ const CommentBox = ({ comment, onLike, onEdit }) => {
               {currentUser &&
                 (currentUser.rest._id === comment.userId ||
                   currentUser.rest.isAdmin) && (
-                  <button
-                    type="button"
-                    className="text-gray-500 hover:text-blue-400"
-                    onClick={handleEdit}
-                  >
-                    Edit
-                  </button>
+                  <>
+                    <button
+                      type="button"
+                      className="text-gray-500 hover:text-blue-400"
+                      onClick={handleEdit}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      type="button"
+                      className="text-gray-500 hover:text-red-400"
+                      onClick={() => onDelete(comment._id)}
+                    >
+                      Delete
+                    </button>
+                  </>
                 )}
             </div>
           </>
@@ -133,6 +144,13 @@ const CommentBox = ({ comment, onLike, onEdit }) => {
       </div>
     </div>
   );
+};
+
+CommentBox.propTypes = {
+  comment: PropTypes.object.isRequired,
+  onDelete: PropTypes.func.isRequired,
+  onLike: PropTypes.func.isRequired,
+  onEdit: PropTypes.func.isRequired,
 };
 
 export default CommentBox;
