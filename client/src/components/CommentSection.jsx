@@ -2,10 +2,11 @@ import axios from 'axios';
 import { Alert, Button, Textarea } from 'flowbite-react';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import CommentBox from './CommentBox';
 
 const CommentSection = ({ postId }) => {
+  const navigate = useNavigate();
   const { currentUser } = useSelector((state) => state.user);
 
   const [comment, setComment] = useState('');
@@ -57,6 +58,34 @@ const CommentSection = ({ postId }) => {
     };
     getComments();
   }, [postId]);
+
+  const handleLike = async (commentId) => {
+    try {
+      if (!currentUser) {
+        navigate('/sing-in');
+        return;
+      }
+      const res = await axios.put(`/api/comments/likeComment/${commentId}`);
+
+      if (!res.statusText === 'OK') {
+        setCommentError('failed to like comment');
+      }
+      const data = await res.data;
+      setComments(
+        comments.map((comment) =>
+          comment._id === commentId
+            ? {
+                ...comment,
+                likes: data.comment.likes,
+                numberOfLikes: data.comment.likes.length,
+              }
+            : comment
+        )
+      );
+    } catch (error) {
+      setCommentError(error.message);
+    }
+  };
 
   return (
     <div className=" max-w-2xl mx-auto w-full p-3">
@@ -120,7 +149,11 @@ const CommentSection = ({ postId }) => {
             </div>
           </div>
           {comments.map((comment) => (
-            <CommentBox key={comment._id} comment={comment} />
+            <CommentBox
+              key={comment._id}
+              comment={comment}
+              onLike={handleLike}
+            />
           ))}
         </>
       )}
