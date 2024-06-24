@@ -3,11 +3,14 @@ import { Button, Spinner } from 'flowbite-react';
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import CommentSection from './CommentSection';
+import PostCard from './PostCard';
+
 const SinglePost = () => {
   const { postSlug } = useParams();
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [resentPost, setRecentPost] = useState(null);
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -30,6 +33,20 @@ const SinglePost = () => {
     };
     fetchPost();
   }, [postSlug]);
+
+  useEffect(() => {
+    try {
+      (async () => {
+        const res = await axios.get(`/api/posts/get-posts`);
+        const data = res.data.posts;
+        if (res.statusText === 'OK') {
+          setRecentPost(data.slice(0, 3));
+        }
+      })();
+    } catch (error) {
+      setError(error);
+    }
+  }, []);
 
   if (loading)
     return (
@@ -67,6 +84,14 @@ const SinglePost = () => {
         dangerouslySetInnerHTML={{ __html: post && post.content }}
       ></div>
       <CommentSection postId={post?._id} />
+
+      <div className="flex flex-col justify-center items-center ">
+        <h1 className="text-xl mt-5 mb-5">Recent Articles</h1>
+        <div className="flex flex-wrap justify-center items-start gap-5">
+          {resentPost &&
+            resentPost.map((post) => <PostCard key={post._id} post={post} />)}
+        </div>
+      </div>
     </main>
   );
 };
