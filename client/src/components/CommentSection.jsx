@@ -1,11 +1,11 @@
 import axios from 'axios';
-import { Alert, Button, Modal, Textarea } from 'flowbite-react';
+import { Alert, Button, Textarea } from 'flowbite-react';
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
-import { HiOutlineExclamationCircle } from 'react-icons/hi';
 import { useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import CommentBox from './CommentBox';
+import HandleModal from './shareComponents/HandleModal';
 
 const CommentSection = ({ postId }) => {
   const navigate = useNavigate();
@@ -194,33 +194,13 @@ const CommentSection = ({ postId }) => {
           ))}
         </>
       )}
-      <Modal
-        show={showModel}
-        onClose={() => setShowModel(false)}
-        popup
-        size="md"
-      >
-        <Modal.Header />
-        <Modal.Body>
-          <div className="text center">
-            <HiOutlineExclamationCircle className="h-14 w-14 text-gray-400 dark:text-gray-200 mb-4 mx-auto" />
-            <h3 className="mb-5 text-center text-lg  text-gray-500 dark:text-gray-400">
-              Are you sure! you want to delete this comment?
-            </h3>
-            <div className="flex justify-center gap-4">
-              <Button
-                color="failure"
-                onClick={() => handleDeleteComment(commentToDelete)}
-              >
-                Yes, I am sure.
-              </Button>
-              <Button color="gray" onClick={() => setShowModel(false)}>
-                No, Cancel
-              </Button>
-            </div>
-          </div>
-        </Modal.Body>
-      </Modal>
+      <HandleModal
+        showModel={showModel}
+        setShowModel={setShowModel}
+        handleDeleteComment={handleDeleteComment}
+        commentToDelete={commentToDelete}
+        title={`comment`}
+      />
     </div>
   );
 };

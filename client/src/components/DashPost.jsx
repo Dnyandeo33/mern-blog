@@ -1,9 +1,9 @@
 import axios from 'axios';
-import { Button, Modal, Table } from 'flowbite-react';
+import { Table } from 'flowbite-react';
 import { useEffect, useState } from 'react';
-import { HiOutlineExclamationCircle } from 'react-icons/hi';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import HandleModal from './shareComponents/HandleModal';
 
 const DashPosts = () => {
   const currentUser = useSelector((state) => state.user);
@@ -131,30 +131,13 @@ const DashPosts = () => {
       ) : (
         <p>You Have No Post Yet!</p>
       )}
-      <Modal
-        show={showModel}
-        onClose={() => setShowModel(false)}
-        popup
-        size="md"
-      >
-        <Modal.Header />
-        <Modal.Body>
-          <div className="text center">
-            <HiOutlineExclamationCircle className="h-14 w-14 text-gray-400 dark:text-gray-200 mb-4 mx-auto" />
-            <h3 className="mb-5 text-center text-lg  text-gray-500 dark:text-gray-400">
-              Are you sure! you want to delete this post?
-            </h3>
-            <div className="flex justify-center gap-4">
-              <Button color="failure" onClick={handleDeletePost}>
-                Yes, I am sure.
-              </Button>
-              <Button color="gray" onClick={() => setShowModel(false)}>
-                No, Cancel
-              </Button>
-            </div>
-          </div>
-        </Modal.Body>
-      </Modal>
+      <HandleModal
+        showModel={showModel}
+        setShowModel={setShowModel}
+        handleDeleteComment={handleDeletePost}
+        handleTo={''}
+        title={`post`}
+      />
     </div>
   );
 };

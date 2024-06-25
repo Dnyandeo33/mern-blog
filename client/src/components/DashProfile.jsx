@@ -8,7 +8,7 @@ import {
 } from 'firebase/storage';
 
 // flowbite imports
-import { Alert, Button, Modal, TextInput } from 'flowbite-react';
+import { Alert, Button, TextInput } from 'flowbite-react';
 
 //react imports
 import { useEffect, useRef, useState } from 'react';
@@ -16,9 +16,6 @@ import { useEffect, useRef, useState } from 'react';
 // react circular imports
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-
-// react icon imports
-import { HiOutlineExclamationCircle } from 'react-icons/hi';
 
 // react redux import
 import { useDispatch, useSelector } from 'react-redux';
@@ -37,6 +34,7 @@ import {
   updateStart,
   updateSuccess,
 } from '../redux/user/userSlice.js';
+import HandleModal from './shareComponents/HandleModal.jsx';
 
 const DashProfile = () => {
   // get currentUser
@@ -292,35 +290,13 @@ const DashProfile = () => {
           {updateUserError}
         </Alert>
       )}
-      {/* {error && (
-        <Alert color="failure" className="mt-5">
-          {error}
-        </Alert>
-      )} */}
-      <Modal
-        show={showModel}
-        onClose={() => setShowModel(false)}
-        popup
-        size="md"
-      >
-        <Modal.Header />
-        <Modal.Body>
-          <div className="text center">
-            <HiOutlineExclamationCircle className="h-14 w-14 text-gray-400 dark:text-gray-200 mb-4 mx-auto" />
-            <h3 className="mb-5 text-center text-lg  text-gray-500 dark:text-gray-400">
-              Are you sure! you want to delete your account?
-            </h3>
-            <div className="flex justify-center gap-4">
-              <Button color="failure" onClick={handleDelete}>
-                Yes, I am sure.
-              </Button>
-              <Button color="gray" onClick={() => setShowModel(false)}>
-                No, Cancel
-              </Button>
-            </div>
-          </div>
-        </Modal.Body>
-      </Modal>
+      <HandleModal
+        showModel={showModel}
+        setShowModel={setShowModel}
+        handleDeleteComment={handleDelete}
+        handleTo={''}
+        title={`account`}
+      />
     </div>
   );
 };

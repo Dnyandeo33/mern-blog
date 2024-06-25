@@ -1,52 +1,18 @@
-import axios from 'axios';
 import { Button, Spinner } from 'flowbite-react';
-import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
+import useFetchPostsBySlug from '../hook/useFetchPostBySlug';
+import useFetchPostsData from '../hook/useFetchPostsData';
 import CommentSection from './CommentSection';
 import PostCard from './PostCard';
 
 const SinglePost = () => {
   const { postSlug } = useParams();
-  const [post, setPost] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
-  const [resentPost, setRecentPost] = useState(null);
+  useFetchPostsData(`get-posts`);
+  useFetchPostsBySlug(`get-posts?slug=${postSlug}`);
 
-  useEffect(() => {
-    const fetchPost = async () => {
-      try {
-        setLoading(true);
-        const res = await axios.get(`/api/posts/get-posts?slug=${postSlug}`);
-        const data = await res.data;
-        if (!res.statusText === 'OK') {
-          setError(true);
-          setLoading(false);
-          return;
-        }
-        setPost(data.posts[0]);
-        setLoading(false);
-        setError(false);
-      } catch (error) {
-        setError(error);
-        setLoading(false);
-      }
-    };
-    fetchPost();
-  }, [postSlug]);
-
-  useEffect(() => {
-    try {
-      (async () => {
-        const res = await axios.get(`/api/posts/get-posts`);
-        const data = res.data.posts;
-        if (res.statusText === 'OK') {
-          setRecentPost(data.slice(0, 3));
-        }
-      })();
-    } catch (error) {
-      setError(error);
-    }
-  }, []);
+  const { loading, slugPosts, posts } = useSelector((state) => state.posts);
+  const post = slugPosts.posts[0];
 
   if (loading)
     return (
@@ -88,8 +54,10 @@ const SinglePost = () => {
       <div className="flex flex-col justify-center items-center ">
         <h1 className="text-xl mt-5 mb-5">Recent Articles</h1>
         <div className="flex flex-wrap justify-center items-start gap-5">
-          {resentPost &&
-            resentPost.map((post) => <PostCard key={post._id} post={post} />)}
+          {posts &&
+            posts.posts
+              .slice(0, 3)
+              .map((post) => <PostCard key={post._id} post={post} />)}
         </div>
       </div>
     </main>
