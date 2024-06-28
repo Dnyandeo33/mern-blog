@@ -1,15 +1,21 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import axios from 'axios';
 
+const baseUrl = '/api/users/'
 
-const initialState = {
-    currentUser: null,
-    error: null,
-    loading: false
-}
+export const getAllUsers = createAsyncThunk('getUser', async (endpoint) => {
+    const res = await axios.get(`${baseUrl}${endpoint}`)
+    return res.data
+})
 
 const userSlice = createSlice({
     name: 'user',
-    initialState,
+    initialState: {
+        currentUser: null,
+        error: null,
+        loading: false,
+        allUsers: []
+    },
     reducers: {
         signInStart: (state) => {
             state.loading = true;
@@ -55,6 +61,21 @@ const userSlice = createSlice({
             state.error = null;
             state.loading = false;
         }
+    },
+
+    extraReducers: (builder) => {
+        builder
+            .addCase(getAllUsers.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(getAllUsers.fulfilled, (state, actions) => {
+                state.loading = false;
+                state.allUsers = actions.payload;
+            })
+            .addCase(getAllUsers.rejected, (state, actions) => {
+                state.loading = false;
+                state.error = actions.payload;
+            })
     }
 });
 

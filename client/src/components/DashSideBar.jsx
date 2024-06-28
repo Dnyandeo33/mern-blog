@@ -2,7 +2,9 @@ import axios from 'axios';
 import { Sidebar } from 'flowbite-react';
 import { useEffect, useState } from 'react';
 import {
+  HiAnnotation,
   HiArrowSmRight,
+  HiChartPie,
   HiDocumentText,
   HiOutlineUserGroup,
   HiUser,
@@ -41,6 +43,17 @@ const DashSideBar = () => {
     <Sidebar className="w-full md:w-56">
       <Sidebar.Items>
         <Sidebar.ItemGroup className="flex flex-col gap-1">
+          {currentUser.currentUser.rest.isAdmin && (
+            <Link to={'/dashboard?tab=dashboard'}>
+              <Sidebar.Item
+                active={tab === 'dashboard' || !tab}
+                icon={HiChartPie}
+                as="div"
+              >
+                Dashboard
+              </Sidebar.Item>
+            </Link>
+          )}
           <Link to={'/dashboard?tab=profile'}>
             <Sidebar.Item
               active={tab === 'profile'}
@@ -77,7 +90,7 @@ const DashSideBar = () => {
             <Link to={'/dashboard?tab=comments'}>
               <Sidebar.Item
                 active={tab === 'comments'}
-                icon={HiOutlineUserGroup}
+                icon={HiAnnotation}
                 as="div"
               >
                 Comments

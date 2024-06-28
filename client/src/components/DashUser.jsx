@@ -3,15 +3,17 @@ import { Table } from 'flowbite-react';
 import { useEffect, useState } from 'react';
 import { FaCheck, FaTimes } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
+
 import HandleModal from './shareComponents/HandleModal';
 
 const DashUser = () => {
-  const currentUser = useSelector((state) => state.user);
-  const { isAdmin } = currentUser.currentUser.rest;
   const [users, setUsers] = useState([]);
   const [showMore, setShowMore] = useState(true);
   const [showModel, setShowModel] = useState(false);
   const [deleteUserId, setDeleteUserId] = useState('');
+
+  const { currentUser } = useSelector((state) => state.user);
+  const { isAdmin } = currentUser.rest;
 
   useEffect(() => {
     const fetchData = async () => {
