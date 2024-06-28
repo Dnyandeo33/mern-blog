@@ -6,7 +6,7 @@ const HandleModal = ({
   showModel,
   setShowModel,
   handleDeleteComment,
-  commentToDelete,
+  handleTo,
   title,
 }) => {
   return (
@@ -21,7 +21,7 @@ const HandleModal = ({
           <div className="flex justify-center gap-4">
             <Button
               color="failure"
-              onClick={() => handleDeleteComment(commentToDelete)}
+              onClick={() => handleDeleteComment(handleTo)}
             >
               Yes, I am sure.
             </Button>
@@ -39,7 +39,7 @@ HandleModal.propTypes = {
   showModel: PropTypes.bool.isRequired,
   setShowModel: PropTypes.func.isRequired,
   handleDeleteComment: PropTypes.func.isRequired,
-  commentToDelete: PropTypes.string.isRequired,
+  handleTo: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
 };
 

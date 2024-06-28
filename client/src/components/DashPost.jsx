@@ -59,7 +59,7 @@ const DashPosts = () => {
 
   return (
     <div className=" table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-300 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500 ">
-      {isAdmin ? (
+      {isAdmin && userPosts.length > 0 ? (
         <>
           <Table hoverable className="shadow-lg">
             <Table.Head>
@@ -129,7 +129,7 @@ const DashPosts = () => {
           )}
         </>
       ) : (
-        <p>You Have No Post Yet!</p>
+        <p>You have no post yet!</p>
       )}
       <HandleModal
         showModel={showModel}

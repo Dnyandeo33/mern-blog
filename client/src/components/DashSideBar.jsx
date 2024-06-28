@@ -73,6 +73,17 @@ const DashSideBar = () => {
               </Sidebar.Item>
             </Link>
           )}
+          {currentUser.currentUser.rest.isAdmin && (
+            <Link to={'/dashboard?tab=comments'}>
+              <Sidebar.Item
+                active={tab === 'comments'}
+                icon={HiOutlineUserGroup}
+                as="div"
+              >
+                Comments
+              </Sidebar.Item>
+            </Link>
+          )}
         </Sidebar.ItemGroup>
         <Sidebar.ItemGroup>
           <Sidebar.Item
