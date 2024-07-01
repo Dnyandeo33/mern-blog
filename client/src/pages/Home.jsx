@@ -11,7 +11,7 @@ const Home = () => {
     <div>
       <div className="flex flex-col justify-center items-center gap-6 px-3 p-24 max-w-6xl mx-auto rounded-lg border border-gray-700 dark:border-teal-500 m-5">
         <h1 className="text-3xl font-bold lg:text-6xl">Welcome to my Blog</h1>
-        <p className="text-gray-500 text-xs sm:text-sm">
+        <p className="text-gray-500 text-center text-xs sm:text-sm">
           Here you will find a variety of articles and tutorials on topics such
           as web development, software engineering, and programming languages.
         </p>

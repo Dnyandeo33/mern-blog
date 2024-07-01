@@ -25,7 +25,6 @@ const DashboardComp = () => {
   const posts = useSelector((state) => state.posts.posts);
   const users = useSelector((state) => state.user.allUsers);
   const comments = useSelector((state) => state.comments.comments);
-  console.log(comments);
 
   return (
     <div className="p-3 md:mx-auto">

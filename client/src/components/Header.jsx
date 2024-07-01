@@ -1,17 +1,30 @@
 import axios from 'axios';
 import { Avatar, Button, Dropdown, Navbar, TextInput } from 'flowbite-react';
+import { useEffect, useState } from 'react';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { FaMoon, FaSun } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { toggleTheme } from '../redux/theme/themeSlice';
 import { signOutSuccess } from '../redux/user/userSlice.js';
 
 const Header = () => {
   const path = useLocation().pathname;
+  const location = useLocation();
+  const navigate = useNavigate();
   const { currentUser } = useSelector((state) => state.user);
   const { theme } = useSelector((state) => state.theme);
   const dispatch = useDispatch();
+
+  const [searchTerm, setSearchTerm] = useState('');
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    const searchTermFromUrl = urlParams.get('searchTerm');
+    if (searchTermFromUrl) {
+      setSearchTerm(searchTermFromUrl);
+    }
+  }, [location.search]);
 
   const handleSignOut = async () => {
     try {
@@ -26,6 +39,14 @@ const Header = () => {
     }
   };
 
+  const handelSearch = (e) => {
+    e.preventDefault();
+    const urlParams = new URLSearchParams(location.search);
+    urlParams.set('searchTerm', searchTerm);
+    const newUrl = urlParams.toString();
+    navigate(`/search?${newUrl}`);
+  };
+
   return (
     // logo
     <Navbar className=" border-b-2">
@@ -38,16 +59,18 @@ const Header = () => {
         </span>
         Blog
       </Link>
-      <form>
+      <form onSubmit={handelSearch}>
         <TextInput
           type="text"
           placeholder="Search..."
           rightIcon={AiOutlineSearch}
-          className=" hidden lg:inline"
+          className="hidden lg:inline cursor-pointer"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
         />
       </form>
-      <Button className=" cursor-pointer w-12 h-9 lg:hidden" color="gray" pill>
-        <AiOutlineSearch />
+      <Button className="cursor-pointer w-12 h-9 lg:hidden" color="gray" pill>
+        <AiOutlineSearch onClick={handelSearch} />
       </Button>
       <div className="flex gap-4 md:order-2">
         <Button
@@ -97,9 +120,6 @@ const Header = () => {
         </Navbar.Link>
         <Navbar.Link active={path === '/about'} as={'div'}>
           <Link to="/about">About</Link>
-        </Navbar.Link>
-        <Navbar.Link active={path === '/projects'} as={'div'}>
-          <Link to="/projects">Projects</Link>
         </Navbar.Link>
       </Navbar.Collapse>
     </Navbar>

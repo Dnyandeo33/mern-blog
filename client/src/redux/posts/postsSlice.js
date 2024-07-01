@@ -13,10 +13,16 @@ export const getPostBySlug = createAsyncThunk('getPostBySlug', async (slug) => {
     return res.data;
 })
 
+export const filterPosts = createAsyncThunk('getByQuery', async (searchTerm) => {
+    const res = await axios.get(`${baseUrl}/get-posts?${searchTerm}`);
+    return res.data;
+})
+
 const postsSlice = createSlice({
     name: "posts",
     initialState: {
         posts: [],
+        filterPosts: [],
         slugPosts: [],
         loading: false,
         error: null,
@@ -58,6 +64,18 @@ const postsSlice = createSlice({
                 state.slugPosts = action.payload;
             })
             .addCase(getPostBySlug.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.error.message;
+            })
+            // filter
+            .addCase(filterPosts.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(filterPosts.fulfilled, (state, action) => {
+                state.loading = false;
+                state.filterPosts = action.payload;
+            })
+            .addCase(filterPosts.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.error.message;
             })
