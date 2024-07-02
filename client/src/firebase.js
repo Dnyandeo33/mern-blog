@@ -6,7 +6,7 @@ import { initializeApp } from "firebase/app";
 // Your web app's Firebase configuration
 const firebaseConfig = {
     apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-    authDomain: "https://mern-blog-ldgh.onrender.com/__/auth/handler",
+    authDomain: "https://mern-blog-ldgh.onrender.com",
     projectId: "mern-blog-dffb7",
     storageBucket: "mern-blog-dffb7.appspot.com",
     messagingSenderId: "135684748984",
