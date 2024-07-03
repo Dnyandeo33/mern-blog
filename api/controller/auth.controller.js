@@ -89,24 +89,26 @@ const authController = {
                 const token = jwt.sign({ id: existEmail._id, isAdmin: existEmail.isAdmin }, process.env.JWT_SECRET);
                 const { password: pass, ...rest } = existEmail._doc;
                 res.status(200).cookie('access_token', token, { httpOnly: true }).json({ success: true, rest });
+            } else {
+                // else generate radom password, hash password 
+                const generatedPassword = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
+                const hashPassword = await bcryptjs.hash(generatedPassword, 10);
+
+                // create new use pass name as username 
+                const newUser = await User.create({
+                    // create name unique and lowercase Ex. Jon Don to jondon4563
+                    username: name.toLowerCase().split(' ').join('') + Math.random().toString(9).slice(-4),
+                    email,
+                    password: hashPassword,
+                    profilePic: googlePhotoUrl
+                });
+
+                // after creating new user set the token
+                const token = jwt.sign({ id: newUser._id, isAdmin: newUser.isAdmin }, process.env.JWT_SECRET);
+                const { password: pass, ...rest } = newUser._doc;
+                res.status(200).cookie('access_token', token, { httpOnly: true }).json({ success: true, rest });
             }
-            // else generate radom password, hash password 
-            const generatedPassword = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
-            const hashPassword = await bcryptjs.hash(generatedPassword, 10);
 
-            // create new use pass name as username 
-            const newUser = await User.create({
-                // create name unique and lowercase Ex. Jon Don to jondon4563
-                username: name.toLowerCase().split(' ').join('') + Math.random().toString(9).slice(-4),
-                email,
-                password: hashPassword,
-                profilePic: googlePhotoUrl
-            });
-
-            // after creating new user set the token
-            const token = jwt.sign({ id: newUser._id, isAdmin: newUser.isAdmin }, process.env.JWT_SECRET);
-            const { password: pass, ...rest } = newUser._doc;
-            res.status(200).cookie('access_token', token, { httpOnly: true }).json({ success: true, rest });
         } catch (error) {
             next(error)
         }
