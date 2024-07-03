@@ -212,7 +212,7 @@ const DashProfile = () => {
           )}
 
           <img
-            src={imageFileUrl || currentUser.rest.profilePic}
+            src={imageFileUrl || currentUser.profilePic}
             alt="user"
             className={`rounded-full object-cover w-full h-full border-8 border-[lightgray] ${
               imageFileUploadProgress &&
@@ -229,14 +229,14 @@ const DashProfile = () => {
           type="text"
           placeholder="username"
           id="username"
-          defaultValue={currentUser.rest.username}
+          defaultValue={currentUser.username}
           onChange={handleChange}
         />
         <TextInput
           type="email"
           placeholder="email"
           id="email"
-          defaultValue={currentUser.rest.email}
+          defaultValue={currentUser.email}
           onChange={handleChange}
         />
         <TextInput
@@ -254,7 +254,7 @@ const DashProfile = () => {
           {loading ? 'Loading...' : 'Update'}
         </Button>
 
-        {currentUser.rest.isAdmin && (
+        {currentUser.isAdmin && (
           <Link to={'/create-post'}>
             <Button
               type="button"
