@@ -30,12 +30,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
 
-app.use((req, res, next) => {
-    res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
-    res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
-    next();
-});
-
 
 // routes
 app.use('/api/users', userRoutes);
@@ -43,10 +37,19 @@ app.use('/api/auth', authRoutes);
 app.use('/api/posts', postRoutes);
 app.use('/api/comments', commentRoutes);
 
-app.use(express.static(path.join(__dirname, '/client/dist')))
+app.use((req, res, next) => {
+    res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
+    res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
+    next();
+});
+
+app.use(express.static(path.join(__dirname, 'dist')))
+
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'))
+    res.sendFile(path.join(__dirname, 'dist', 'index.html'))
 })
+
+
 
 app.use((err, req, res, next) => {
     const statusCode = err.statusCode || 500;
