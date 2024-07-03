@@ -33,12 +33,13 @@ const SingIn = () => {
     try {
       dispatch(signInStart());
       const res = await axios.post('/api/auth/sing-in', formData);
-      const data = res.data;
-      if (data.success === false) return dispatch(signInFailure(data.message));
-      if (res.statusText === 'OK') {
-        dispatch(signInSuccess(data.rest));
-        navigateTo('/');
+
+      const data = res.data.rest;
+      if (!res.statusText === 'OK') {
+        dispatch(signInFailure(data.message));
       }
+      dispatch(signInSuccess(data));
+      navigateTo('/');
     } catch (error) {
       dispatch(signInFailure(error.response.data.message));
     }
