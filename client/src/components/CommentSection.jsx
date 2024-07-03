@@ -27,7 +27,7 @@ const CommentSection = ({ postId }) => {
       const res = await axios.post('/api/comments/create', {
         content: comment,
         postId,
-        userId: currentUser.rest?._id,
+        userId: currentUser._id,
       });
       if (!res.statusText === 'OK') {
         setCommentError('failed to comment');
@@ -124,15 +124,12 @@ const CommentSection = ({ postId }) => {
       {currentUser ? (
         <div className="flex items-center gap-1 my-5 text-gray-500 text-sm">
           <p>Singed in as:</p>
-          <img
-            src={currentUser?.rest.profilePic}
-            className="h-5 w-5 rounded-full"
-          />
+          <img src={currentUser?.profilePic} className="h-5 w-5 rounded-full" />
           <Link
             to={'/dashboard?tab=profile'}
             className=" text-xs text-cyan-600 hover:underline"
           >
-            @{currentUser?.rest.username}
+            @{currentUser?.username}
           </Link>
         </div>
       ) : (

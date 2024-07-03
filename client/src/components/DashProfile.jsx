@@ -134,10 +134,7 @@ const DashProfile = () => {
 
     try {
       dispatch(updateStart());
-      const res = await axios.put(
-        `/api/users/${currentUser.rest._id}`,
-        formData
-      );
+      const res = await axios.put(`/api/users/${currentUser._id}`, formData);
       const data = await res.data;
       if (!res.statusText === 'OK') {
         setUpdateUserError(data.message);
@@ -156,7 +153,7 @@ const DashProfile = () => {
     setShowModel(false);
     try {
       dispatch(deleteStart());
-      const res = await axios.delete(`/api/users/${currentUser.rest._id}`);
+      const res = await axios.delete(`/api/users/${currentUser._id}`);
       const data = await res.data;
       if (!res.ok) {
         dispatch(deleteFailure(data.message));

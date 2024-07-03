@@ -13,7 +13,7 @@ const DashUser = () => {
   const [deleteUserId, setDeleteUserId] = useState('');
 
   const { currentUser } = useSelector((state) => state.user);
-  const { isAdmin } = currentUser.rest;
+  const { isAdmin } = currentUser;
 
   useEffect(() => {
     const fetchData = async () => {

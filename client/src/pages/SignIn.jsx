@@ -36,7 +36,7 @@ const SingIn = () => {
       const data = res.data;
       if (data.success === false) return dispatch(signInFailure(data.message));
       if (res.statusText === 'OK') {
-        dispatch(signInSuccess(data));
+        dispatch(signInSuccess(data.rest));
         navigateTo('/');
       }
     } catch (error) {

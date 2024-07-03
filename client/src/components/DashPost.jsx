@@ -6,8 +6,9 @@ import { Link } from 'react-router-dom';
 import HandleModal from './shareComponents/HandleModal';
 
 const DashPosts = () => {
-  const currentUser = useSelector((state) => state.user);
-  const { _id, isAdmin } = currentUser.currentUser.rest;
+  const { currentUser } = useSelector((state) => state.user);
+  const { _id, isAdmin } = currentUser;
+
   const [userPosts, setUserPosts] = useState([]);
   const [showMore, setShowMore] = useState(true);
   const [showModel, setShowModel] = useState(false);

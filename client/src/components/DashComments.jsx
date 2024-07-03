@@ -5,9 +5,9 @@ import { useSelector } from 'react-redux';
 import HandleModal from './shareComponents/HandleModal';
 
 const DashComments = () => {
-  const currentUser = useSelector((state) => state.user);
+  const { currentUser } = useSelector((state) => state.user);
 
-  const { isAdmin } = currentUser.currentUser.rest;
+  const { isAdmin } = currentUser;
   const [comments, setComments] = useState([]);
   const [showMore, setShowMore] = useState(true);
   const [showModel, setShowModel] = useState(false);

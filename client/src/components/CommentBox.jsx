@@ -106,7 +106,7 @@ const CommentBox = ({ comment, onLike, onEdit, onDelete }) => {
                 onClick={() => onLike(comment._id)}
                 className={`text-gray-300 hover:text-blue-400 ${
                   currentUser &&
-                  comment.likes?.includes(currentUser.rest._id) &&
+                  comment.likes?.includes(currentUser._id) &&
                   '!text-blue-500'
                 }`}
               >
@@ -119,8 +119,7 @@ const CommentBox = ({ comment, onLike, onEdit, onDelete }) => {
                   }`}
               </p>
               {currentUser &&
-                (currentUser.rest._id === comment.userId ||
-                  currentUser.rest.isAdmin) && (
+                (currentUser._id === comment.userId || currentUser.isAdmin) && (
                   <>
                     <button
                       type="button"

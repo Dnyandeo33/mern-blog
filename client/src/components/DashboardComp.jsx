@@ -14,7 +14,7 @@ import useFetchUsersData from '../hook/useFetchUsersData';
 
 const DashboardComp = () => {
   const { currentUser } = useSelector((state) => state.user);
-  const { isAdmin } = currentUser.rest;
+  const { isAdmin } = currentUser;
 
   if (isAdmin) {
     useFetchPostsData('get-posts?limit=5');

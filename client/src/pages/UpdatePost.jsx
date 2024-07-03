@@ -27,7 +27,7 @@ const UpdatePost = () => {
 
   const navigateTo = useNavigate();
   const { postId } = useParams();
-  const currentUser = useSelector((state) => state.user);
+  const { currentUser } = useSelector((state) => state.user);
 
   useEffect(() => {
     try {
@@ -95,7 +95,7 @@ const UpdatePost = () => {
 
     try {
       const res = await axios.put(
-        `/api/posts/update-post/${formData._id}/${currentUser.currentUser.rest._id}`,
+        `/api/posts/update-post/${formData._id}/${currentUser._id}`,
         formData
       );
       const data = await res.data;
