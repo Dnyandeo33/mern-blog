@@ -6,43 +6,55 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { app } from '../firebase.js';
 import { signInSuccess } from '../redux/user/userSlice.js';
+
 const OAuth = () => {
   const dispatch = useDispatch();
   const navigateTo = useNavigate();
   const auth = getAuth(app);
 
-  // handleGoogle res function
+  // handleGoogleClick function
   const handleGoogleClick = async () => {
-    // get GoogleAuthProvider provider set as new provider
+    // Create a new GoogleAuthProvider instance
     const provider = new GoogleAuthProvider();
-
-    // set as select_account customer
     provider.setCustomParameters({ prompt: 'select_account' });
 
     try {
-      // signInWithPopup, provide auth from getAuth and provider
+      // Sign in with Google popup
       const resultFromGoogle = await signInWithPopup(auth, provider);
 
-      // fetch api end point and send user info to database
+      // Extract user information
+      const { displayName, email, photoURL } = resultFromGoogle.user;
+
+      // Post user info to your API
       const res = await axios.post('/api/auth/google', {
-        name: resultFromGoogle.user.displayName,
-        email: resultFromGoogle.user.email,
-        googlePhotoUrl: resultFromGoogle.user.photoURL,
+        name: displayName,
+        email: email,
+        googlePhotoUrl: photoURL,
       });
 
-      const data = res.data;
-      if (res.statusText === 'OK') {
-        dispatch(signInSuccess(data));
+      if (res.status === 200) {
+        // Check for successful response
+        dispatch(signInSuccess(res.data));
         navigateTo('/');
+      } else {
+        console.error('Error from server:', res.statusText);
+        alert('There was an issue during sign-in. Please try again.');
       }
     } catch (error) {
-      console.log(error);
+      if (error.code === 'auth/popup-closed-by-user') {
+        console.log('The user closed the popup window.');
+        alert('The sign-in process was interrupted. Please try again.');
+      } else {
+        console.error('An error occurred during sign-in:', error);
+        alert('An error occurred. Please try again.');
+      }
     }
   };
+
   return (
     <Button type="button" outline onClick={handleGoogleClick}>
       <AiFillGoogleCircle className="h-6 w-6 m-r-2" />
-      <span className=" text-blue-500">Continue With Google</span>
+      <span className="text-blue-500">Continue With Google</span>
     </Button>
   );
 };
