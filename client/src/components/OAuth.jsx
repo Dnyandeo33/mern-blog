@@ -16,7 +16,10 @@ const OAuth = () => {
   const handleGoogleClick = async () => {
     // Create a new GoogleAuthProvider instance
     const provider = new GoogleAuthProvider();
-    provider.setCustomParameters({ prompt: 'select_account' });
+    provider.setCustomParameters({
+      prompt: 'select_account',
+      display: 'popup',
+    });
 
     try {
       // Sign in with Google popup
