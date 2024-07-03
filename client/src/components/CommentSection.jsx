@@ -198,7 +198,7 @@ const CommentSection = ({ postId }) => {
         showModel={showModel}
         setShowModel={setShowModel}
         handleDeleteComment={handleDeleteComment}
-        commentToDelete={commentToDelete}
+        handleTo={commentToDelete}
         title={`comment`}
       />
     </div>

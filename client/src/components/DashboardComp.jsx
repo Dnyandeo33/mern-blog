@@ -94,7 +94,7 @@ const DashboardComp = () => {
               <Table.HeadCell>Username</Table.HeadCell>
             </Table.Head>
             {users &&
-              users?.users.map((user) => (
+              users?.users?.map((user) => (
                 <Table.Body key={user._id} className="divide-y">
                   <Table.Row className="hover:bg-gray-100 dark:hover:bg-gray-700">
                     <Table.Cell>
@@ -154,7 +154,7 @@ const DashboardComp = () => {
               <Table.HeadCell>Likes</Table.HeadCell>
             </Table.Head>
             {comments &&
-              comments?.comments.map((comment) => (
+              comments?.comments?.map((comment) => (
                 <Table.Body key={comment._id} className="divide-y">
                   <Table.Row className="hover:bg-gray-100 dark:hover:bg-gray-700">
                     <Table.Cell className="w-[58rem]">

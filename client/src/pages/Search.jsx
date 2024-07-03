@@ -115,13 +115,13 @@ const Search = () => {
           Search Results
         </h1>
         <div className="flex justify-center items-center flex-wrap m-5 gap-4">
-          {!loading && filterPosts?.posts.length === 0 && (
+          {!loading && filterPosts?.posts?.length === 0 && (
             <p className="text-xl text-center text-gray-500">No Posts Found</p>
           )}
           {loading && (
             <p className="text-xl text-center text-gray-500">Loading...</p>
           )}
-          {filterPosts?.posts.map((post) => (
+          {filterPosts?.posts?.map((post) => (
             <PostCard key={post._id} post={post} />
           ))}
         </div>

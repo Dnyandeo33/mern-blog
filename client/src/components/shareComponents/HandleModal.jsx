@@ -39,7 +39,7 @@ HandleModal.propTypes = {
   showModel: PropTypes.bool.isRequired,
   setShowModel: PropTypes.func.isRequired,
   handleDeleteComment: PropTypes.func.isRequired,
-  handleTo: PropTypes.string.isRequired,
+  handleTo: PropTypes.string,
   title: PropTypes.string.isRequired,
 };
 
