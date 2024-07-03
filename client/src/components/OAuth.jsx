@@ -34,7 +34,7 @@ const OAuth = () => {
 
       if (res.status === 200) {
         // Check for successful response
-        dispatch(signInSuccess(res.data));
+        dispatch(signInSuccess(res.data.rest));
         navigateTo('/');
       } else {
         console.error('Error from server:', res.statusText);

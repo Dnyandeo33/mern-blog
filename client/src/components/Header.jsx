@@ -86,16 +86,14 @@ const Header = () => {
           <Dropdown
             arrowIcon={false}
             inline
-            label={
-              <Avatar alt="user" img={currentUser?.rest.profilePic} rounded />
-            }
+            label={<Avatar alt="user" img={currentUser?.profilePic} rounded />}
           >
             <Dropdown.Header>
               <span className="block text-sm font-light">
-                @{currentUser.rest.username}
+                @{currentUser.username}
               </span>
               <span className="block text-sm font-medium truncate ">
-                {currentUser.rest.email}
+                {currentUser.email}
               </span>
             </Dropdown.Header>
             <Link to={'/dashboard?tab=profile'}>
