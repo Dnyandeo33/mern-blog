@@ -5,7 +5,7 @@ import { AiFillGoogleCircle } from 'react-icons/ai';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { app } from '../firebase.js';
-import { signInSuccess } from '../redux/user/userSlice.js';
+import { signInFailure, signInSuccess } from '../redux/user/userSlice.js';
 
 const OAuth = () => {
   const dispatch = useDispatch();
@@ -35,14 +35,13 @@ const OAuth = () => {
         googlePhotoUrl: photoURL,
       });
 
-      if (res.status === 200) {
-        // Check for successful response
-        dispatch(signInSuccess(res.data.rest));
-        navigateTo('/');
-      } else {
-        console.error('Error from server:', res.statusText);
-        alert('There was an issue during sign-in. Please try again.');
+      const data = res.data;
+      if (!res.statusText === 'OK') {
+        dispatch(signInFailure(data.message));
       }
+      // Check for successful response
+      dispatch(signInSuccess(data.rest));
+      navigateTo('/');
     } catch (error) {
       if (error.code === 'auth/popup-closed-by-user') {
         console.log('The user closed the popup window.');
